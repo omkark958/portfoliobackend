@@ -20,7 +20,9 @@ async function bootstrap() {
         callback(null, true);
       } else if (
         typeof origin === 'string' &&
-        origin.startsWith('https://omkarpkulkarni.netlify.app')
+        (origin.startsWith('https://omkarpkulkarni.netlify.app')||
+        origin.startsWith('https://portfoliobackend-o3w8.onrender.com'))
+        
       ) {
         callback(null, true);
       } else {
