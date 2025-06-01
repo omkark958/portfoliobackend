@@ -13,7 +13,9 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     origin: (origin, callback) => {
-      if (!origin || origin.startsWith('http://localhost') || origin.startsWith('https://omkarpkulkarni.netlify.app')) {
+     if (typeof origin === 'string' && origin.startsWith('http://localhost')) {
+        callback(null, true);
+      } else if (typeof origin === 'string' && origin.startsWith('https://omkarpkulkarni.netlify.app')) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
