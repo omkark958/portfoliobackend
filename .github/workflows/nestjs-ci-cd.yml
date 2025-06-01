@@ -1,0 +1,35 @@
+name: CI/CD for NestJS
+
+on:
+  push:
+    branches:
+      - master  # change if your default branch is different
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🟢 Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: ✅ Lint code
+        run: npm run lint
+
+      - name: 🧪 Run tests
+        run: npm run test
+
+      - name: 🛠️ Build project
+        run: npm run build
+
+      - name: 🚀 Deploy to Render (optional)
+        if: success() && secrets.DEPLOY_HOOK_URL != ''
+        run: curl -X POST ${{ secrets.DEPLOY_HOOK_URL }}
