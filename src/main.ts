@@ -12,10 +12,16 @@ async function bootstrap() {
   app.enableCors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    origin: (origin, callback) => {
-     if (typeof origin === 'string' && origin.startsWith('http://localhost')) {
+    origin: (
+      origin: unknown,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      if (typeof origin === 'string' && origin.startsWith('http://localhost')) {
         callback(null, true);
-      } else if (typeof origin === 'string' && origin.startsWith('https://omkarpkulkarni.netlify.app')) {
+      } else if (
+        typeof origin === 'string' &&
+        origin.startsWith('https://omkarpkulkarni.netlify.app')
+      ) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
@@ -24,7 +30,10 @@ async function bootstrap() {
     credentials: true,
   });
 
-
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+(async () => {
+  await bootstrap();
+})().catch((err) => {
+  console.error('Bootstrap failed:', err);
+});
