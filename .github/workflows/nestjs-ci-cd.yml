@@ -31,5 +31,5 @@ jobs:
         run: npm run build
 
       - name: 🚀 Deploy to Render (optional)
-        if: success() && secrets.DEPLOY_HOOK_URL != ''
+        if: success()
         run: curl -X POST ${{ secrets.DEPLOY_HOOK_URL }}
