@@ -10,27 +10,32 @@ async function bootstrap() {
   //   credentials: true,
   // });
   app.enableCors({
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    origin: (
-      origin: unknown,
-      callback: (err: Error | null, allow?: boolean) => void,
-    ) => {
-      if (typeof origin === 'string' && origin.startsWith('http://localhost')) {
-        callback(null, true);
-      } else if (
-        typeof origin === 'string' &&
-        (origin.startsWith('https://omkarpkulkarni.netlify.app')||
-        origin.startsWith('https://portfoliobackend-o3w8.onrender.com'))
-        
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-  });
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: (
+    origin: unknown,
+    callback: (err: Error | null, allow?: boolean) => void,
+  ) => {
+    const allowedOrigins = [
+      'http://localhost',
+      'https://omkarpkulkarni.netlify.app',
+      'https://portfoliobackend-o3w8.onrender.com',
+    ];
+
+    // ✅ Allow requests with no origin (e.g., server checks, curl, Postman)
+    if (
+      !origin || 
+      (typeof origin === 'string' &&
+        allowedOrigins.some((o) => origin.startsWith(o)))
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+});
+
 
   await app.listen(process.env.PORT ?? 3000);
 }
